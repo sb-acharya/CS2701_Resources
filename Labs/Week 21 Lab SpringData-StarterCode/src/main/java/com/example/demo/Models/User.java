@@ -6,7 +6,8 @@ import java.util.Date;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
+import java.util.List;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -26,23 +27,23 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
-	
+
 	@NotBlank
 	String name;
-	
+
 	@NotBlank
-	@Column(unique=true)
+	@Column(unique = true)
 	String email;
-	
+
 	@NotBlank
 	String password;
-	
+
 	@Enumerated(EnumType.STRING) // Stores the enum as a string in the database
 	@Column(nullable = false)
 	UserType userType;
-	
+
 	@Column(nullable = false, updatable = false)
 	@CreatedDate
 	private Date createdAt;
@@ -51,23 +52,26 @@ public class User implements Serializable {
 
 	@LastModifiedDate
 	private Date updatedAt;
-	
-	
-	 public User() {
-			super();
-			// Auto-generated constructor stub
+
+	@OneToMany(mappedBy = "buyer")
+	private List<Order> orders;
+
+	@OneToMany(mappedBy = "seller")
+	private List<SellerProduce> sellerProduces;
+
+	public User() {
+		super();
+		// Auto-generated constructor stub
 	}
-		
-	 
-	 public User(String name, String email, String password, UserType userType) {
+
+	public User(String name, String email, String password, UserType userType) {
 		super();
 		this.name = name;
 		this.email = email;
 		this.password = password;
 		this.userType = userType;
 	}
-	
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -84,43 +88,50 @@ public class User implements Serializable {
 		this.email = email;
 	}
 
-
 	public String getName() {
 		return name;
 	}
-
 
 	public void setName(String name) {
 		this.name = name;
 	}
 
-
 	public String getPassword() {
 		return password;
 	}
-
 
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
-
 	public UserType getUserType() {
 		return userType;
 	}
-
 
 	public void setUserType(UserType userType) {
 		this.userType = userType;
 	}
 
+	public List<Order> getOrders() {
+		return orders;
+	}
 
+	public void setOrders(List<Order> orders) {
+		this.orders = orders;
+	}
+
+	public List<SellerProduce> getSellerProduces() {
+		return sellerProduces;
+	}
+
+	public void setSellerProduces(List<SellerProduce> sellerProduces) {
+		this.sellerProduces = sellerProduces;
+	}
 
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + ", userType="
 				+ userType + "]";
 	}
-	
-	
+
 }
